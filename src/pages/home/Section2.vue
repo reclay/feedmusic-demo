@@ -18,12 +18,12 @@ const handleScroll = (e) => {
 .container {
   height: 100vh;
   background-image: url(@/assets/section2-background.png);
-  transition: all 36s ease-out;
   background-size: cover;
 }
 .is-active {
   .container {
     transform: scale(1.4);
+    transition: all 36s ease-out;
   }
 }
 </style>

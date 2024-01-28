@@ -1,5 +1,6 @@
 import { reactive, ref } from "vue";
 import { scrollText as data } from "./data";
+import { curLine } from './state'
 
 const lineGap = 42;
 const lineTime = 0.3;
@@ -8,7 +9,6 @@ const scaleGap = oneLineGap / 1000;
 const opacityGap = 0.35;
 const useScrollText = () => {
   let scrollText = reactive(data);
-  let curLine = ref(0);
   const defaultStyle = [];
   let scrollStyle = reactive([]);
   for (let i = 0; i < scrollText.length; i++) {
@@ -49,7 +49,8 @@ const useScrollText = () => {
   return {
     scrollText,
     handleScroll,
-    scrollStyle
+    scrollStyle,
+    curLine
   };
 };
 export default useScrollText;

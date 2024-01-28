@@ -1,6 +1,6 @@
 <template>
   <div class="index-container">
-    <Header></Header>
+    <Header @changePage="changePage"></Header>
     <div
       v-for="(com, i) in components"
       :key="com"

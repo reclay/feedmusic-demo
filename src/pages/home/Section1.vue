@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" @mousewheel="handleScroll">
+  <div class="wrapper" @mousewheel="onScroll">
     <div class="video-wrapper">
       <video :src="videoSrc" loop autoplay class="video" muted></video>
       <div class="video-mask"></div>
@@ -17,7 +17,10 @@
         </p>
       </div>
     </div>
-    <div class="intro">
+    <div
+      class="intro animate__animated"
+      :class="curLine < 1 ? 'animate__fadeIn' : 'animate__fadeOut'"
+    >
       <p>
         Feed is an intelligent property rights and payments platform, using
         intelligent software and digital security that goes well beyond
@@ -34,10 +37,21 @@
 </template>
 
 <script setup>
-import useScrollText from './scrollText'
+import { defineEmits } from "vue";
+import useScrollText from "./scrollText";
 import videoSrc from "@/assets/intro.mp4";
 
-const {scrollText, handleScroll, scrollStyle} = useScrollText()
+const emit = defineEmits(["next"]);
+const { scrollText, handleScroll, scrollStyle, curLine } = useScrollText();
+const onScroll = (e) => {
+  if (e.deltaY > 0 && curLine.value === scrollText.length - 1) {
+    setTimeout(() => {
+      emit("next");
+    }, 100);
+    return;
+  }
+  handleScroll(e);
+};
 const getScrollStyle = (i) => {
   let { opacity, translateY, scale } = scrollStyle[i];
   return `opacity:${opacity};transform:translateY(${translateY}%) scale(${scale})`;
@@ -102,5 +116,16 @@ const getScrollStyle = (i) => {
   padding: 25px;
   color: #fff;
   width: 420px;
+}
+
+@media (max-width: $mobileWidth) {
+  .body {
+    font-size: 30px;
+  }
+}
+@media (max-width: $padWidth) {
+  .intro {
+    display: none;
+  }
 }
 </style>
