@@ -19,8 +19,8 @@ const useScrollText = () => {
     });
     scrollStyle.push({ ...defaultStyle[i] });
   }
-  const handleScroll = (e) => {
-    let targetLine = curLine.value + e.deltaY / 100;
+  const handleScroll = (deltaY) => {
+    let targetLine = curLine.value + deltaY / 100;
     if (targetLine < 0) {
       targetLine = 0;
     } else if (targetLine > scrollText.length - 1) {

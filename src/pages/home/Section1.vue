@@ -1,7 +1,13 @@
 <template>
-  <div class="wrapper" @mousewheel="onScroll">
+  <div
+    class="wrapper"
+    @mousewheel="onScroll"
+    @touchmove.prevent="handleTouchMove"
+    @touchstart="handleTouchStart"
+  >
     <div class="video-wrapper">
-      <video :src="videoSrc" loop autoplay class="video" muted></video>
+      <video :src="videoSrc" loop autoplay class="video" muted :poster="videoPlaceholder">
+      </video>
       <div class="video-mask"></div>
     </div>
     <div class="body">
@@ -39,19 +45,27 @@
 <script setup>
 import { defineEmits } from "vue";
 import useScrollText from "./scrollText";
+import useTouchEvent from "./touchEvent";
 import videoSrc from "@/assets/intro.mp4";
+import videoPlaceholder from '@/assets/intro-placeholder.png'
 
 const emit = defineEmits(["next"]);
 const { scrollText, handleScroll, scrollStyle, curLine } = useScrollText();
-const onScroll = (e) => {
-  if (e.deltaY > 0 && curLine.value === scrollText.length - 1) {
+const processScroll = (deltaY) => {
+  if (deltaY > 0 && curLine.value === scrollText.length - 1) {
     setTimeout(() => {
       emit("next");
     }, 100);
     return;
   }
-  handleScroll(e);
+  handleScroll(deltaY);
 };
+const { handleTouchMove, handleTouchStart } = useTouchEvent(processScroll);
+
+const onScroll = (e) => {
+  processScroll(e.deltaY)
+}
+
 const getScrollStyle = (i) => {
   let { opacity, translateY, scale } = scrollStyle[i];
   return `opacity:${opacity};transform:translateY(${translateY}%) scale(${scale})`;
@@ -120,7 +134,10 @@ const getScrollStyle = (i) => {
 
 @media (max-width: $mobileWidth) {
   .body {
-    font-size: 30px;
+    font-size: 18px;
+    p {
+      line-height: 3;
+    }
   }
 }
 @media (max-width: $padWidth) {

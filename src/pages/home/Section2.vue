@@ -1,16 +1,26 @@
 <template>
-  <div class="container" @mousewheel="handleScroll"></div>
+  <div
+    class="container"
+    @mousewheel="handleScroll"
+    @touchmove.prevent="handleTouchMove"
+    @touchstart="handleTouchStart"
+  ></div>
 </template>
 
 <script setup>
-const emit = defineEmits(['prev', 'next'])
+import useTouchEvent from "./touchEvent";
+const emit = defineEmits(["prev", "next"]);
+const processScroll = (deltaY) => {
+  if (deltaY > 0) {
+    emit("next");
+  }
+  if (deltaY < 0) {
+    emit("prev");
+  }
+};
+const { handleTouchMove, handleTouchStart } = useTouchEvent(processScroll);
 const handleScroll = (e) => {
-  if (e.deltaY > 0) {
-    emit('next')
-  }
-  if (e.deltaY < 0) {
-    emit('prev')
-  }
+  processScroll(e.deltaY);
 };
 </script>
 
@@ -19,6 +29,7 @@ const handleScroll = (e) => {
   height: 100vh;
   background-image: url(@/assets/section2-background.png);
   background-size: cover;
+  background-position: center center;
 }
 .is-active {
   .container {
