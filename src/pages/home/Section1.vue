@@ -1,7 +1,7 @@
 <template>
   <div
     class="wrapper"
-    @mousewheel="onScroll"
+    @mousewheel.prevent="onScroll"
     @touchmove.prevent="handleTouchMove"
     @touchstart="handleTouchStart"
   >
