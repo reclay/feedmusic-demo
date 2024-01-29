@@ -55,7 +55,7 @@
 .scroll-text {
   position: absolute;
   left: 50%;
-  bottom: -5px;
+  bottom: 5px;
   width: 100%;
   transform: translate(-50%);
   color: #fff;

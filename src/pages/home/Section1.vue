@@ -25,7 +25,7 @@
     </div>
     <div
       class="intro animate__animated"
-      :class="curLine < 1 ? 'animate__fadeIn' : 'animate__fadeOut'"
+      :class="curLine < 1.5 ? 'animate__fadeIn' : 'animate__fadeOut'"
     >
       <p>
         Feed is an intelligent property rights and payments platform, using
@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import { defineEmits } from "vue";
+import { defineEmits, watch } from "vue";
 import useScrollText from "./scrollText";
 import useTouchEvent from "./touchEvent";
 import videoSrc from "@/assets/intro.mp4";
@@ -70,6 +70,10 @@ const getScrollStyle = (i) => {
   let { opacity, translateY, scale } = scrollStyle[i];
   return `opacity:${opacity};transform:translateY(${translateY}%) scale(${scale})`;
 };
+
+watch(curLine, (newV) => {
+
+})
 </script>
 
 <style lang="scss" scoped>
@@ -130,6 +134,15 @@ const getScrollStyle = (i) => {
   padding: 25px;
   color: #fff;
   width: 420px;
+  p {
+    margin-bottom: 10px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+.animate__animated {
+  animation-duration: 2s;
 }
 
 @media (max-width: $mobileWidth) {
