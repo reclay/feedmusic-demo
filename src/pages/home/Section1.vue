@@ -68,7 +68,7 @@ const onScroll = (e) => {
 
 const getScrollStyle = (i) => {
   let { opacity, translateY, scale } = scrollStyle[i];
-  return `opacity:${opacity};transform:translateY(${translateY}%) scale(${scale})`;
+  return `opacity:${opacity};transform:translateY(${translateY}%) translate3d(0px, 0px, 0px) scale(${scale})`;
 };
 
 watch(curLine, (newV) => {

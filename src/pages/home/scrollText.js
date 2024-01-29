@@ -1,6 +1,6 @@
 import { reactive, ref } from "vue";
 import { scrollText as data } from "./data";
-import { curLine } from './state'
+import { curLine } from "./state";
 
 const lineGap = 42;
 const lineTime = 0.3;
@@ -20,7 +20,7 @@ const useScrollText = () => {
     scrollStyle.push({ ...defaultStyle[i] });
   }
   const handleScroll = (deltaY) => {
-    let targetLine = curLine.value + deltaY / 60;
+    let targetLine = curLine.value + deltaY / 80;
     if (targetLine < 0) {
       targetLine = 0;
     } else if (targetLine > scrollText.length - 1) {
@@ -28,7 +28,10 @@ const useScrollText = () => {
     }
     requestAnimationFrame(() => {
       curLine.value = targetLine;
-      const curMaxLine = Math.floor(targetLine / lineTime);
+      const curMaxLine = Math.min(
+        Math.floor(targetLine / lineTime),
+        scrollStyle.length - 1
+      );
       let i = 0;
       for (; i <= curMaxLine; i++) {
         if (i === 0) {
@@ -50,7 +53,7 @@ const useScrollText = () => {
     scrollText,
     handleScroll,
     scrollStyle,
-    curLine
+    curLine,
   };
 };
 export default useScrollText;

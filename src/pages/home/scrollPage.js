@@ -51,7 +51,6 @@ const useScrollPage = () => {
       bg1: startV,
       bg2: startV,
     });
-    console.log(count)
     count = 0;
 
     changeSwitch();
