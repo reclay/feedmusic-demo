@@ -1,6 +1,7 @@
 import { reactive, ref } from "vue";
 import { scrollText as data } from "./data";
 import { curLine } from "./state";
+import { useRoute } from "vue-router";
 
 const lineGap = 42;
 const lineTime = 0.3;
@@ -8,6 +9,7 @@ const oneLineGap = lineGap / lineTime;
 const scaleGap = oneLineGap / 1000;
 const opacityGap = 0.35;
 const useScrollText = () => {
+  const route = useRoute();
   let scrollText = reactive(data);
   const defaultStyle = [];
   let scrollStyle = reactive([]);
@@ -19,8 +21,19 @@ const useScrollText = () => {
     });
     scrollStyle.push({ ...defaultStyle[i] });
   }
+  const speedMap = {
+    slow: 500,
+  };
   const handleScroll = (deltaY) => {
-    let targetLine = curLine.value + deltaY / 100;
+    const speedType = route.query.s;
+    let speed = 100;
+    if (+speedType > 1) {
+      speed = +speedType;
+    }
+    if (speedMap[route.query.s]) {
+      speed = speedMap[route.query.s];
+    }
+    let targetLine = curLine.value + deltaY / speed;
     if (targetLine < 0) {
       targetLine = 0;
     } else if (targetLine > scrollText.length - 1) {
