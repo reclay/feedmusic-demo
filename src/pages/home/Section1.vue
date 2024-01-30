@@ -1,13 +1,20 @@
 <template>
   <div
     class="wrapper"
-    @mousewheel.prevent="onScroll"
+    @wheel.prevent="onScroll"
     @touchmove.prevent="handleTouchMove"
     @touchstart="handleTouchStart"
   >
+    <div v-if="isDebug">{{ debugArr }}</div>
     <div class="video-wrapper">
-      <video :src="videoSrc" loop autoplay class="video" muted :poster="videoPlaceholder">
-      </video>
+      <video
+        :src="videoSrc"
+        loop
+        autoplay
+        class="video"
+        muted
+        :poster="videoPlaceholder"
+      ></video>
       <div class="video-mask"></div>
     </div>
     <div class="body">
@@ -43,12 +50,16 @@
 </template>
 
 <script setup>
-import { defineEmits, watch } from "vue";
+import { defineEmits, watch, ref, computed } from "vue";
+import { useRoute } from "vue-router";
 import useScrollText from "./scrollText";
 import useTouchEvent from "./touchEvent";
 import videoSrc from "@/assets/intro.mp4";
-import videoPlaceholder from '@/assets/intro-placeholder.png'
+import videoPlaceholder from "@/assets/intro-placeholder.png";
 
+const route = useRoute();
+const isDebug = computed(() => route.query.d === "1");
+let debugArr = [];
 const emit = defineEmits(["next"]);
 const { scrollText, handleScroll, scrollStyle, curLine } = useScrollText();
 const processScroll = (deltaY) => {
@@ -63,17 +74,19 @@ const processScroll = (deltaY) => {
 const { handleTouchMove, handleTouchStart } = useTouchEvent(processScroll);
 
 const onScroll = (e) => {
-  processScroll(e.deltaY)
-}
+  if (isDebug.value) {
+    debugArr.push(e.deltaY);
+  }
+  console.log(e.deltaY, e.wheelDeltaY, e.wheelDelta, e.deltaMode, e.detail, e.axis)
+  processScroll(e.deltaY);
+};
 
 const getScrollStyle = (i) => {
   let { opacity, translateY, scale } = scrollStyle[i];
   return `opacity:${opacity};transform:translateY(${translateY}%) translate3d(0px, 0px, 0px) scale(${scale})`;
 };
 
-watch(curLine, (newV) => {
-
-})
+watch(curLine, (newV) => {});
 </script>
 
 <style lang="scss" scoped>
@@ -121,6 +134,7 @@ watch(curLine, (newV) => {
   line-height: 1.4;
   position: absolute;
   width: 100%;
+  transition: all .5s ease-out;
   ::v-deep a {
     color: #fff;
     text-decoration: underline;

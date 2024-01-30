@@ -1,7 +1,7 @@
 <template>
   <div
     class="container"
-    @mousewheel="handleScroll"
+    @wheel="handleScroll"
     @touchmove.prevent="handleTouchMove"
     @touchstart="handleTouchStart"
   ></div>

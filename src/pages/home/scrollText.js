@@ -26,13 +26,16 @@ const useScrollText = () => {
   };
   const handleScroll = (deltaY) => {
     const speedType = route.query.s;
-    let speed = 100;
+    let speed = 66;
     if (+speedType > 1) {
       speed = +speedType;
     }
     if (speedMap[route.query.s]) {
       speed = speedMap[route.query.s];
     }
+    // if (Math.abs(deltaY > 99)) {
+    //   speed = 200
+    // }
     let targetLine = curLine.value + deltaY / speed;
     if (targetLine < 0) {
       targetLine = 0;
